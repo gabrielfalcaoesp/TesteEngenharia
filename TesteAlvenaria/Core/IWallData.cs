@@ -12,7 +12,6 @@ internal interface IWallData
     int PointX { get; }
     int PointY { get; }
     int Angle { get; }
-    int Width { get; }
     int Length { get; }
     List<IBlockData> Blocks { get; }
     List<IOpeningData> Openings { get; }

@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TesteAlvenaria.Core;
 using TesteAlvenaria.Libs;
+using TesteAlvenaria.Teste;
 
 namespace TesteAlvenaria
 {
@@ -71,13 +72,66 @@ namespace TesteAlvenaria
                 return;
             if (_model.SelectedWall == null)
                 DrawFirstRow();
+            else
+                DrawElevation(_model.SelectedWall);
+        }
+
+        private void DrawElevation(string wallName)
+        {
+            var selectedWall = _model.Walls.Find(w => w.Name == wallName);
+            if (selectedWall == null)
+                return;
+            SetScaleElevation(selectedWall);
+            selectedWall.Blocks.ForEach(bl => DrawBlockElevation(bl));
+            selectedWall.Openings.ForEach(op => DrawOpeningElevation(op));
+        }
+
+        private void DrawOpeningElevation(IOpeningData op)
+        {
+            var rectOpening = new RectGeometry(op.WallPosition, op.Elevation, op.Length, op.Height);
+            if (op.Elevation == 0)
+            {
+                DrawRect(rectOpening, 4);
+                DrawX(rectOpening, 4);
+            }
+            else
+            {
+                DrawRect(rectOpening, 5);
+                DrawX(rectOpening, 5);
+
+            }
+        }
+
+        private void DrawBlockElevation(IBlockData bl)
+        {
+            var rectBlock = new RectGeometry(bl.WallPosition, bl.Elevation, bl.Length, bl.Height);
+            DrawRect(rectBlock, 2);
+        }
+
+        private void SetScaleElevation(IWallData selectedWall)
+        {
+            var h = cnv_preview.ActualHeight;
+            var w = cnv_preview.ActualWidth;
+
+            _minX = 0;
+            var maxBlock = selectedWall.Blocks.Count == 0 ? 0 : selectedWall.Blocks.Max(bl => bl.Elevation + bl.Height);
+            var maxOpening = selectedWall.Openings.Count == 0 ? 0 : selectedWall.Openings.Max(op => op.Elevation + op.Height);
+            _maxY = Math.Max(maxBlock, maxOpening);
+
+            var scaleX = w / ((selectedWall.Length) * 1.1);
+            var scaleY = h / ((_maxY) * 1.1);
+
+            _scale = Math.Min(scaleX, scaleY);
+
+            _posX = (w - _scale * (selectedWall.Length)) / 2.0;
+            _posY = (h - _scale * (_maxY)) / 2.0;
         }
 
         private void DrawFirstRow()
         {
             SetScaleFirstRow();
             var rects = new List<RectGeometry>();
-            _model.Walls.ForEach(w => rects.Add(new RectGeometry(w.PointX, w.PointY, w.Length, w.Width, w.Angle)));
+            _model.Walls.ForEach(w => rects.Add(new RectGeometry(w.PointX, w.PointY, w.Length, 20, w.Angle)));
             //rects.ForEach(r => DrawRect(r, 1));
             foreach (var wall in _model.Walls)
             {
@@ -128,7 +182,7 @@ namespace TesteAlvenaria
             var h = cnv_preview.ActualHeight;
             var w = cnv_preview.ActualWidth;
             var rects = new List<RectGeometry>();
-            _model.Walls.ForEach(w => rects.Add(new RectGeometry(w.PointX, w.PointY, w.Length, w.Width, w.Angle)));
+            _model.Walls.ForEach(w => rects.Add(new RectGeometry(w.PointX, w.PointY, w.Length, 20, w.Angle)));
 
             _minX = rects.Min(r => r.GetMinX());
             var maxX = rects.Max(r => r.GetMaxX());
@@ -142,6 +196,29 @@ namespace TesteAlvenaria
 
             _posX = (w - _scale * (maxX - _minX)) / 2.0;
             _posY = (h - _scale * (_maxY - minY)) / 2.0;
+        }
+
+        private void DrawX(RectGeometry rect, int type)
+        {
+            var left = (rect.GetMinX() - _minX) * _scale;
+            var top = (_maxY - rect.GetMaxY()) * _scale;
+
+            Line line1 = new Line();
+            line1.X1 = _posX + left;
+            line1.Y1 = _posY + top;
+            line1.X2 = _posX + left + rect.Length * _scale;
+            line1.Y2 = _posY + top + _scale * rect.Width;
+            line1.Stroke = GetStrokeBlock(type);
+
+            Line line2 = new Line();
+            line2.X1 = _posX + left + rect.Length * _scale;
+            line2.Y1 = _posY + top;
+            line2.X2 = _posX + left ;
+            line2.Y2 = _posY + top + _scale * rect.Width;
+            line2.Stroke = GetStrokeBlock(type);
+
+            cnv_preview.Children.Add(line1);
+            cnv_preview.Children.Add(line2);
         }
 
         private void DrawRect(RectGeometry rect, int type)

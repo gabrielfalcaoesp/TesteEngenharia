@@ -28,7 +28,7 @@
             <Button Grid.Row="3" Content="Processar" Command="{Binding Path=ProcessButton}" Margin="5"/>
             <Button Grid.Row="4" Content="Mostrar Primeira Fiada" Command="{Binding Path=ShowFirstRowButton}" Margin="5"/>
             <Button Grid.Row="5" Content="Mostrar Segunda Fiada" Command="{Binding Path=ShowSecondRowButton}" Margin="5"/>
-            <ListBox Grid.Row="6" Margin="5" ItemsSource="{Binding Path=WallList}" SelectedItem="{}" />
+            <ListBox Grid.Row="6" Margin="5" ItemsSource="{Binding Path=WallList}" SelectedItem="{Binding Path=SelectedWall}" />
         </Grid>
         <Canvas Grid.Column="1" Name="cnv_preview" Margin="3" SizeChanged="cnv_preview_SizeChanged"/>
     </Grid>
