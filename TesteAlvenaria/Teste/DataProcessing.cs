@@ -11,6 +11,7 @@ namespace TesteAlvenaria.Teste
             List<string> blocks = new List<string>();
             List<string> windows = new List<string>();
             List<string> doors = new List<string>();
+            Dictionary<int, List<string>> paredes = new Dictionary<int, List<string>>();
 
             foreach (string str in linesFile)
             {
@@ -37,22 +38,24 @@ namespace TesteAlvenaria.Teste
             }
 
             Block.FilterValues(blocks);
-
+            Opening.FilterValues(windows, "windowns");
+            Opening.FilterValues(doors, "door");
+            
 
 
             //_______________________ código para identificar parede ___________________
 
-            Dictionary<int, List<string>> paredes = new Dictionary<int, List<string>>();
-            paredes.Add(-1, new List<string>());  // Inicializa com uma lista vazia para a chave -1
-            int paredeAtual = -1;
+            
+            paredes.Add(1, new List<string>());  
+            int paredeAtual = 1;
 
             for (int i = 1; i < blocks.Count; i++)
             {
                 string blocoAtual = blocks[i];
                 string blocoAnterior = blocks[i - 1];
 
-                int segundoValorAtual = ExtrairSegundoValor(blocoAtual);
-                int segundoValorAnterior = ExtrairSegundoValor(blocoAnterior);
+                int segundoValorAtual = ExtrairValor(blocoAtual, 2);
+                int segundoValorAnterior = ExtrairValor(blocoAnterior, 2);
 
                 if (segundoValorAtual != segundoValorAnterior)
                 {
@@ -69,15 +72,16 @@ namespace TesteAlvenaria.Teste
                 List<string> blocosDaParede = par.Value;
                 
             }
+            paredes[1].Add(blocks[1]);
             Console.WriteLine(paredes);
         }
 
-        static int ExtrairSegundoValor(string bloco)
+        public static int ExtrairValor(string bloco, int valor)
         {
             string[] partes = bloco.Split('|');
-            if (partes.Length >= 2 && int.TryParse(partes[1], out int segundoValor))
+            if (partes.Length >= valor && int.TryParse(partes[valor-1], out int valorExtraido))
             {
-                return segundoValor;
+                return valorExtraido;
             }
             return -1; 
         }

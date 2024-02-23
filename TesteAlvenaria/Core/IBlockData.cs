@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TesteAlvenaria.Teste;
 
 namespace TesteAlvenaria.Core;
 
@@ -22,7 +23,7 @@ public class Block : IBlockData
     public int Length { get; set; }
     public int Elevation { get; set; }
 
-    public Block (int wallPosition, int height, int length)
+    public Block (int wallPosition, int length)
     {
         WallPosition = wallPosition;
         Height = 20;
@@ -31,10 +32,19 @@ public class Block : IBlockData
 
     public static void FilterValues(List<string> blocks)
     {
-        List<Block> blocksList = new List<Block>();
-        foreach (string block in blocks)
+        
+        List<int> listWallPosition = new List<int>();
+        List<int> listLength = new List<int>();
+        for (int i = 0; i < blocks.Count; i++)
         {
+            int wallPosition = DataProcessing.ExtrairValor(blocks[i],3);
+            listWallPosition.Add(wallPosition);
+        }
 
+        for (int i = 0; i < blocks.Count; i++)
+        {
+            int length = DataProcessing.ExtrairValor(blocks[i], 1);
+            listLength.Add(length);
         }
     }
 }
