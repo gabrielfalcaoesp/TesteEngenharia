@@ -8,7 +8,7 @@ using TesteAlvenaria.Teste;
 
 namespace TesteAlvenaria.Core;
 
-internal interface IOpeningData
+public interface IOpeningData
 {
     int WallPosition { get; }
     int Height { get; }
@@ -24,14 +24,6 @@ public class Opening : IOpeningData
     public int Length { get; set; }
     public int Elevation { get; set; }
 
-    public Opening(int wallPosition, int height, int length)
-    {
-        WallPosition = wallPosition;
-        Height = 20;
-        Length = length;
-        Elevation = 0;
-    }
-
     public Opening(int wallPosition, int height, int length, int elevation)
     {
         WallPosition = wallPosition;
@@ -39,47 +31,37 @@ public class Opening : IOpeningData
         Length = length;
         Elevation = elevation;
     }
+}
 
-    public static void FilterValues(List<string> opening, string windownOrDoor)
+    public static class OpeningFilter
     {
-        List<int> listWallPosition = new List<int>();
-        List<int> listLength = new List<int>();
-        List<int> listHeight = new List<int>();
-        List<int> listElevation = new List<int>();
-
+    public static List<Opening> FilterValues(List<string> doors, string doorOrWindows)
+    {
+        List<Opening> listOpening = new List<Opening>();
+        int elevation = 0;
+        foreach (string blockString in doors)
         {
-            for (int i = 0; i < opening.Count; i++)
+            int wallPosition = DataProcessing.ExtrairValor(blockString, 4);
+            int length = DataProcessing.ExtrairValor(blockString, 1);
+            int height = DataProcessing.ExtrairValor(blockString, 2);
+
+            if(doorOrWindows == "Windows")
             {
-                int wallPosition = DataProcessing.ExtrairValor(opening[i], 4);
-                listWallPosition.Add(wallPosition);
+                elevation = DataProcessing.ExtrairValor(blockString, 3);
             }
 
-            for (int i = 0; i < opening.Count; i++)
-            {
-                int length = DataProcessing.ExtrairValor(opening[i], 1);
-                listLength.Add(length);
-            }
-
-            for (int i = 0; i < opening.Count; i++)
-            {
-                int height = DataProcessing.ExtrairValor(opening[i], 2);
-                listHeight.Add(height);
-            }
-
-            if (windownOrDoor == "windowns")
-            {
-                for (int i = 0; i < opening.Count; i++)
-                {
-                    int elevation = DataProcessing.ExtrairValor(opening[i], 3);
-                    listElevation.Add(elevation);
-                }
-            }
             else
             {
-                int elevation = 0;
-                listElevation.Add(elevation);
+                elevation = 0;
             }
+            Opening opening = new Opening(wallPosition, height, length, elevation);
 
+            listOpening.Add(opening);
         }
+
+        return listOpening;
     }
 }
+
+    
+

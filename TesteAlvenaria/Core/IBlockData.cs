@@ -1,50 +1,51 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TesteAlvenaria.Teste;
+using TesteAlvenaria.Teste; 
 
-namespace TesteAlvenaria.Core;
-
-internal interface IBlockData
+namespace TesteAlvenaria.Core
 {
-    int WallPosition { get; }
-    int Height { get; }
-    int Length { get; }
-    int Elevation { get; }
-}
-
-public class Block : IBlockData
-{
-
-    public int WallPosition { get; set; }
-    public int Height { get; set; }
-    public int Length { get; set; }
-    public int Elevation { get; set; }
-
-    public Block (int wallPosition, int length)
+    public interface IBlockData
     {
-        WallPosition = wallPosition;
-        Height = 20;
-        Length = length;
+        int WallPosition { get; }
+        int Height { get; }
+        int Length { get; }
+        int Elevation { get; }
     }
 
-    public static void FilterValues(List<string> blocks)
+    public class Block : IBlockData
     {
-        
-        List<int> listWallPosition = new List<int>();
-        List<int> listLength = new List<int>();
-        for (int i = 0; i < blocks.Count; i++)
-        {
-            int wallPosition = DataProcessing.ExtrairValor(blocks[i],3);
-            listWallPosition.Add(wallPosition);
-        }
+        public int WallPosition { get; set; }
+        public int Height { get; set; }
+        public int Length { get; set; }
+        public int Elevation { get; set; }
 
-        for (int i = 0; i < blocks.Count; i++)
+        public Block(int wallPosition, int length)
         {
-            int length = DataProcessing.ExtrairValor(blocks[i], 1);
-            listLength.Add(length);
+            WallPosition = wallPosition;
+            Length = length;
+            Height = 20;
+        }
+    }
+
+    public static class BlockFilter
+    {
+        public static List<Block> FilterValues(List<string> blocks)
+        {
+            List<Block> listBlocks = new List<Block>();
+
+            foreach (string blockString in blocks)
+            {
+                int wallPosition = DataProcessing.ExtrairValor(blockString, 3);
+                int length = DataProcessing.ExtrairValor(blockString, 1);
+
+
+                Block block = new Block(wallPosition, length);
+
+                listBlocks.Add(block);
+                
+            }
+
+            return listBlocks;
         }
     }
 }

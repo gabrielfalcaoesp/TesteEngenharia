@@ -37,9 +37,10 @@ namespace TesteAlvenaria.Teste
                 }
             }
 
-            Block.FilterValues(blocks);
-            Opening.FilterValues(windows, "windowns");
-            Opening.FilterValues(doors, "door");
+            BlockFilter.FilterValues(blocks);
+            OpeningFilter.FilterValues(windows, "Windows");
+            OpeningFilter.FilterValues(doors, "Doors");
+           
             
 
 
@@ -66,14 +67,10 @@ namespace TesteAlvenaria.Teste
                 paredes[paredeAtual].Add(blocoAtual);
             }
 
-            foreach (var par in paredes)
-            {
-                int numeroParede = par.Key;
-                List<string> blocosDaParede = par.Value;
-                
-            }
+            
             paredes[1].Add(blocks[1]);
             Console.WriteLine(paredes);
+            WallFilter.FilterValues(blocks, paredes);
         }
 
         public static int ExtrairValor(string bloco, int valor)
