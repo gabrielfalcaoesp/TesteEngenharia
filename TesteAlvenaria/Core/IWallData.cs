@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Documents;
 using System.Windows.Media.Media3D;
 using System.Xml.Linq;
 using TesteAlvenaria.Teste;
@@ -32,7 +33,7 @@ public class Wall : IWallData
     public List<Block> Blocks { get; } = new List<Block>();
     public List<Opening> Openings { get; } = new List<Opening>();
 
-    public Wall(string name, int pointX, int pointY, int angle, int length, List<Block> blocks, List<Opening> openings)
+    public Wall(string name, int pointX, int pointY, int angle, int length, List<Block> blocks)
     {
         Name = name;
         PointX = pointX;
@@ -40,7 +41,6 @@ public class Wall : IWallData
         Angle = angle;
         Length = length;
         Blocks = blocks;
-        Openings = openings;
     }
 }
 
@@ -59,16 +59,16 @@ public static class WallFilter
             int angle = parede.Value.Min(s => DataProcessing.ExtrairValor(s, 4));
             int length = parede.Value.Max(s => DataProcessing.ExtrairValor(s, 3));
 
-            int maxValue = parede.Value.Count;
-            int minValue = previousMaxValue;
+            int maxValueBlock = parede.Value.Count;
+            int minValueBlock = previousMaxValue;
+            List<string> sublistBlock = parede.Value.GetRange(minValueBlock, maxValueBlock);
+            List<Block> listBlocks = BlockFilter.FilterValues(sublistBlock);
 
 
-            List<string> sublist = parede.Value.GetRange(0, 13);
-            List<Block> listBlocks = BlockFilter.FilterValues(sublist);
-            
-            Console.WriteLine(listBlocks);
+            Wall wall = new Wall(name, pointX, pointY, angle, length, listBlocks);
+            listWall.Add(wall);
 
-            
+
         }
 
         return listWall;

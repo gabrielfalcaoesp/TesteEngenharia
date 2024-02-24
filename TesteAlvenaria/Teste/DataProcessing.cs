@@ -38,8 +38,11 @@ namespace TesteAlvenaria.Teste
             }
 
             BlockFilter.FilterValues(blocks);
-            OpeningFilter.FilterValues(windows, "Windows");
-            OpeningFilter.FilterValues(doors, "Doors");
+            List<Opening> listWindows = OpeningFilter.FilterValues(windows, "Windows");
+            List<Opening> listDoors = OpeningFilter.FilterValues(doors, "Doors");
+            Console.WriteLine(listWindows);
+            Console.WriteLine(listDoors);
+
            
             
 
@@ -50,26 +53,33 @@ namespace TesteAlvenaria.Teste
             paredes.Add(1, new List<string>());  
             int paredeAtual = 1;
 
-            for (int i = 1; i < blocks.Count; i++)
+            for (int i = 0; i < blocks.Count; i++)
             {
-                string blocoAtual = blocks[i];
-                string blocoAnterior = blocks[i - 1];
-
-                int segundoValorAtual = ExtrairValor(blocoAtual, 2);
-                int segundoValorAnterior = ExtrairValor(blocoAnterior, 2);
-
-                if (segundoValorAtual != segundoValorAnterior)
+                if (i == 0)
                 {
-                    paredeAtual++;
-                    paredes.Add(paredeAtual, new List<string>());
+                    paredes[paredeAtual].Add(blocks[0]);
                 }
 
-                paredes[paredeAtual].Add(blocoAtual);
+                else
+                {
+                    string blocoAtual = blocks[i];
+                    string blocoAnterior = blocks[i - 1];
+
+                    int segundoValorAtual = ExtrairValor(blocoAtual, 2);
+                    int segundoValorAnterior = ExtrairValor(blocoAnterior, 2);
+
+                    if (segundoValorAtual != segundoValorAnterior)
+                    {
+                        paredeAtual++;
+                        paredes.Add(paredeAtual, new List<string>());
+                    }
+
+                    paredes[paredeAtual].Add(blocoAtual);
+                }
+                
             }
 
             
-            paredes[1].Add(blocks[1]);
-            Console.WriteLine(paredes);
             WallFilter.FilterValues(blocks, paredes);
         }
 
