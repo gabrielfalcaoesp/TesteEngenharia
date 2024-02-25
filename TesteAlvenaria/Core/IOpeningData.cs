@@ -41,7 +41,7 @@ public class Opening : IOpeningData
         int elevation = 0;
         foreach (string blockString in doors)
         {
-            int wallPosition = DataProcessing.ExtrairValor(blockString, 4);
+            int wallPosition = DataProcessing.ExtrairValor(blockString, 5);
             int length = DataProcessing.ExtrairValor(blockString, 1);
             int height = DataProcessing.ExtrairValor(blockString, 2);
 
@@ -52,6 +52,7 @@ public class Opening : IOpeningData
 
             else
             {
+                wallPosition = DataProcessing.ExtrairValor(blockString, 3);
                 elevation = 0;
             }
             Opening opening = new Opening(wallPosition, height, length, elevation);
@@ -65,3 +66,4 @@ public class Opening : IOpeningData
 
     
 
+  

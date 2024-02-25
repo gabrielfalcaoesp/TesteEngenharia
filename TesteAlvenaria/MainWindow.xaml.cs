@@ -127,7 +127,7 @@ namespace TesteAlvenaria
             _posY = (h - _scale * (_maxY)) / 2.0;
         }
 
-        private void DrawFirstRow()
+        public void DrawFirstRow()
         {
             SetScaleFirstRow();
             var rects = new List<RectGeometry>();

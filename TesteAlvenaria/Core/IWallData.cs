@@ -33,7 +33,7 @@ public class Wall : IWallData
     public List<Block> Blocks { get; } = new List<Block>();
     public List<Opening> Openings { get; } = new List<Opening>();
 
-    public Wall(string name, int pointX, int pointY, int angle, int length, List<Block> blocks)
+    public Wall(string name, int pointX, int pointY, int angle, int length, List<Block> blocks, List<Opening> openings)
     {
         Name = name;
         PointX = pointX;
@@ -41,12 +41,13 @@ public class Wall : IWallData
         Angle = angle;
         Length = length;
         Blocks = blocks;
+        Openings = openings;
     }
 }
 
 public static class WallFilter
 {
-    public static List<Wall> FilterValues(List<string> blocks, Dictionary<int, List<string>> paredes)
+    public static List<Wall> FilterValues(List<string> blocks, Dictionary<int, List<string>> paredes, List<Opening> listWindows, List<Opening> listDoors)
     {
         List<Wall> listWall = new List<Wall>();
         int previousMaxValue = 0;
@@ -64,11 +65,28 @@ public static class WallFilter
             List<string> sublistBlock = parede.Value.GetRange(minValueBlock, maxValueBlock);
             List<Block> listBlocks = BlockFilter.FilterValues(sublistBlock);
 
+            List<Opening> openings = new List<Opening>();
+            for (int i = 0; i < listWindows.Count; i++)
+            {
+                if (listWindows[i].WallPosition == pointX)
+                {
+                    openings.Add(listWindows[i]);
+                }
+            }
 
-            Wall wall = new Wall(name, pointX, pointY, angle, length, listBlocks);
+            for (int i = 0; i < listDoors.Count; i++)
+            {
+                if (listDoors[i].WallPosition == pointX)
+                {
+                    openings.Add(listDoors[i]);
+                }
+            }
+
+
+            Wall wall = new Wall(name, pointX, pointY, angle, length, listBlocks, openings);
             listWall.Add(wall);
 
-
+            
         }
 
         return listWall;

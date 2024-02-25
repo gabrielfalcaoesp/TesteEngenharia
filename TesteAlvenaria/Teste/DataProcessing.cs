@@ -40,15 +40,9 @@ namespace TesteAlvenaria.Teste
             BlockFilter.FilterValues(blocks);
             List<Opening> listWindows = OpeningFilter.FilterValues(windows, "Windows");
             List<Opening> listDoors = OpeningFilter.FilterValues(doors, "Doors");
-            Console.WriteLine(listWindows);
-            Console.WriteLine(listDoors);
+
 
            
-            
-
-
-            //_______________________ código para identificar parede ___________________
-
             
             paredes.Add(1, new List<string>());  
             int paredeAtual = 1;
@@ -80,7 +74,7 @@ namespace TesteAlvenaria.Teste
             }
 
             
-            WallFilter.FilterValues(blocks, paredes);
+            WallFilter.FilterValues(blocks, paredes, listDoors, listWindows);
         }
 
         public static int ExtrairValor(string bloco, int valor)

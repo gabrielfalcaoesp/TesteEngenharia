@@ -52,7 +52,17 @@ namespace TesteAlvenaria
             _dispatcher = Application.Current.Dispatcher;
             ChooseButton = new GenericCommand(obj => ChooseFile(), obj => !IsIndeterminate);
             ProcessButton = new GenericCommand(obj => ProcessFile(), obj => FilePath != string.Empty && !IsIndeterminate);
-            ShowFirstRowButton = new GenericCommand(obj => { ShowRow = 0; SelectedWall = null; }, obj => !IsIndeterminate);
+            ShowFirstRowButton = new GenericCommand(
+    obj =>
+    {
+        ShowRow = 0;
+        SelectedWall = null;
+        MainWindow mainWindow = new MainWindow();
+        mainWindow.DrawFirstRow();
+        
+    },
+    obj => !IsIndeterminate
+);
             ShowSecondRowButton = new GenericCommand(obj => { ShowRow = 20; SelectedWall = null; }, obj => !IsIndeterminate);
 
             RectangleGeometry myRectangleGeometry = new RectangleGeometry();

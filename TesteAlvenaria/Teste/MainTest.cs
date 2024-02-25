@@ -16,7 +16,6 @@ internal class MainTest
     {
         DataProcessing dataProcessing = new DataProcessing();
         string[] conteudo = File.ReadAllLines(path);
-        Console.WriteLine(conteudo);
 
         dataProcessing.BlockOrOpening(conteudo);
 
