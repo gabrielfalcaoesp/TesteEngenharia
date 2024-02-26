@@ -47,23 +47,34 @@ public class Wall : IWallData
 
 public static class WallFilter
 {
-    public static List<Wall> FilterValues(List<string> blocks, Dictionary<int, List<string>> paredes, List<Opening> listWindows, List<Opening> listDoors)
+    public static List<Wall> FilterValues(List<Block> blocks, Dictionary<int, List<string>> paredes, List<Opening> listWindows, List<Opening> listDoors)
     {
         List<Wall> listWall = new List<Wall>();
-        int previousMaxValue = 0;
+        int minValueBlock = 0;
+        int maxValueBlock = 0;
         foreach (KeyValuePair<int, List<string>> parede in paredes)
         {
             
             string name = "parede " + parede.Key;
+            
             int pointX = parede.Value.Min(s => DataProcessing.ExtrairValor(s, 2));
-            int pointY = parede.Value.Min(s => DataProcessing.ExtrairValor(s, 3));
             int angle = parede.Value.Min(s => DataProcessing.ExtrairValor(s, 4));
+            int pointY = parede.Value.Min(s => DataProcessing.ExtrairValor(s, 3));
             int length = parede.Value.Max(s => DataProcessing.ExtrairValor(s, 3));
 
-            int maxValueBlock = parede.Value.Count;
-            int minValueBlock = previousMaxValue;
-            List<string> sublistBlock = parede.Value.GetRange(minValueBlock, maxValueBlock);
-            List<Block> listBlocks = BlockFilter.FilterValues(sublistBlock);
+            if(angle == 00)
+            {
+                pointX = parede.Value.Min(s => DataProcessing.ExtrairValor(s, 3));
+                pointY = parede.Value.Min(s => DataProcessing.ExtrairValor(s, 2));
+                Console.WriteLine(pointY);
+            }
+
+            maxValueBlock = maxValueBlock + parede.Value.Count;
+
+            List<Block> listBlocks = blocks.GetRange(minValueBlock, maxValueBlock - minValueBlock);
+            Console.WriteLine(listBlocks);
+            minValueBlock = maxValueBlock;
+
 
             List<Opening> openings = new List<Opening>();
             for (int i = 0; i < listWindows.Count; i++)
@@ -76,7 +87,7 @@ public static class WallFilter
 
             for (int i = 0; i < listDoors.Count; i++)
             {
-                if (listDoors[i].WallPosition == pointX)
+                if (listDoors[i].WallPosition == pointY)
                 {
                     openings.Add(listDoors[i]);
                 }

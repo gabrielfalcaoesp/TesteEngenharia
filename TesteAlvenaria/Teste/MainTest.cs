@@ -12,16 +12,16 @@ namespace TesteAlvenaria.Teste;
 internal class MainTest
 {
 
-    public static List<IWallData> RunTest(string path)
+    public static List<Wall> RunTest(string path)
     {
         DataProcessing dataProcessing = new DataProcessing();
         string[] conteudo = File.ReadAllLines(path);
 
-        dataProcessing.BlockOrOpening(conteudo);
+        var walls = dataProcessing.BlockOrOpening(conteudo);
 
         
 
-        return new List<IWallData>();
+        return walls;
 
     }
       

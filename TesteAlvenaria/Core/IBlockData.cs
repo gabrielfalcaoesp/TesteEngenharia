@@ -6,10 +6,10 @@ namespace TesteAlvenaria.Core
 {
     public interface IBlockData
     {
-        int WallPosition { get; }
+        int WallPosition { get; set; }
         int Height { get; }
         int Length { get; }
-        int Elevation { get; }
+        int Elevation { get; set; }
     }
 
     public class Block : IBlockData

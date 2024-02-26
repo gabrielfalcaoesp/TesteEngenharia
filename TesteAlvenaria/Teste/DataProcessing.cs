@@ -6,7 +6,7 @@ namespace TesteAlvenaria.Teste
 {
     internal class DataProcessing
     {
-        public void BlockOrOpening(string[] linesFile)
+        public List<Wall> BlockOrOpening(string[] linesFile)
         {
             List<string> blocks = new List<string>();
             List<string> windows = new List<string>();
@@ -37,7 +37,7 @@ namespace TesteAlvenaria.Teste
                 }
             }
 
-            BlockFilter.FilterValues(blocks);
+            List<Block> listBlocks = BlockFilter.FilterValues(blocks);
             List<Opening> listWindows = OpeningFilter.FilterValues(windows, "Windows");
             List<Opening> listDoors = OpeningFilter.FilterValues(doors, "Doors");
 
@@ -74,7 +74,7 @@ namespace TesteAlvenaria.Teste
             }
 
             
-            WallFilter.FilterValues(blocks, paredes, listDoors, listWindows);
+            return WallFilter.FilterValues(listBlocks, paredes, listDoors, listWindows);
         }
 
         public static int ExtrairValor(string bloco, int valor)
